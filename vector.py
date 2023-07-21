@@ -1,4 +1,5 @@
 import math
+from decimal import Decimal
 
 class Vector(object):
     def __init__(self, coordinates):
@@ -56,9 +57,7 @@ class Vector(object):
         
     def direction(self):
         magnitude_result = self.magnitude()
-    
-        result = []
-        normalised_unit = 1 / magnitude_result
+        normalised_unit = 1.0 / magnitude_result
             
         return self.multiply(normalised_unit)
         
@@ -88,10 +87,48 @@ class Vector(object):
                 raise Exception('Cannot compute an angle with 0 vector')
             else:
                 raise e
+                
+    def is_parallel(self, vector):
+        zero_vector = self.multiply(0)
+        
+        if vector == zero_vector:
+            return True
+        
+        normalised_vector = self.direction()
+        normalised_vector_1 = vector.direction()
+        inverted_vector = normalised_vector.multiply(-1)
+        
+        if normalised_vector_1 == normalised_vector or normalised_vector_1 == inverted_vector:
+            return True
+        else:
+            return False
+            
+    def is_orthogonal(self, vector):
+        dot_result = self.dot_product(vector)
+        
+        if dot_result == 0:
+            return True
+            
+        angle_degrees = self.angle(vector, True)
+        
+        if angle_degrees == 90:
+            return True    
+        else:
+            return False
+            
+    def projection(self, vector):
+        normalised_vector = vector.direction()
+        magnitude = self.dot_product(normalised_vector)
+        
+        return normalised_vector.multiply(magnitude)
+        
+    def orthogonal(self, vector):
+        projection_result
 
 
 ##################################
 print('Plus, Minus, Scalar Multiply')
+
 vector = Vector([8.218, -9.341])
 vector_1 = Vector([-1.129, 2.111])
 print(vector.plus(vector_1))
@@ -107,6 +144,7 @@ print(vector.multiply(scalar))
 ##################################
 print('\n')
 print('Magnitude & Direction')
+
 vector = Vector([-0.221, 7.437])
 print(float("%.3f" % vector.magnitude()))
 
@@ -122,6 +160,7 @@ print(vector.direction())
 ##################################
 print('\n')
 print('Dot Product & Angle')
+
 vector = Vector([7.887, 4.138])
 vector_1 = Vector([-8.802, 6.776])
 print(float("%.3f" % vector.dot_product(vector_1)))
@@ -137,3 +176,55 @@ print(float("%.3f" % vector.angle(vector_1)))
 vector = Vector([7.35, 0.221, 5.188])
 vector_1 = Vector([2.751, 8.259, 3.985])
 print(float("%.3f" % (vector.angle(vector_1, True))))
+
+
+##################################
+print('\n')
+print('Parallel & Orthogonal Vectors')
+
+vector = Vector([-7.579, -7.88])
+vector_1 = Vector([22.737, 23.64])
+print(vector.is_parallel(vector_1))
+
+vector = Vector([-2.029, 9.97, 4.172])
+vector_1 = Vector([-9.231, -6.639, -7.245])
+print(vector.is_parallel(vector_1))
+
+vector = Vector([-2.328, -7.284, -1.214])
+vector_1 = Vector([-1.821, 1.072, -2.94])
+print(vector.is_parallel(vector_1))
+
+vector = Vector([2.118, 4.827])
+vector_1 = Vector([0, 0])
+print(vector.is_parallel(vector_1))
+
+print('\n')
+
+vector = Vector([-7.579, -7.88])
+vector_1 = Vector([22.737, 23.64])
+print(vector.is_orthogonal(vector_1))
+
+vector = Vector([-2.029, 9.97, 4.172])
+vector_1 = Vector([-9.231, -6.639, -7.245])
+print(vector.is_orthogonal(vector_1))
+
+vector = Vector([-2.328, -7.284, -1.214])
+vector_1 = Vector([-1.821, 1.072, -2.94])
+print(vector.is_orthogonal(vector_1))
+
+vector = Vector([2.118, 4.827])
+vector_1 = Vector([0, 0])
+print(vector.is_orthogonal(vector_1))
+
+
+##################################
+print('\n')
+print('Projecting Vectors')
+
+vector = Vector([3.039, 1.879])
+vector_1 = Vector([0.825, 2.036])
+print(vector.projection(vector_1))
+
+vector = Vector([3.039, 1.879])
+vector_1 = Vector([0.825, 2.036])
+print(vector.projection(vector_1))
