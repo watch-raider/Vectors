@@ -117,13 +117,29 @@ class Vector(object):
             return False
             
     def projection(self, vector):
-        normalised_vector = vector.direction()
-        magnitude = self.dot_product(normalised_vector)
+        try:
+            normalised_vector = vector.direction()
+            magnitude = self.dot_product(normalised_vector)
+            
+            return normalised_vector.multiply(magnitude)
         
-        return normalised_vector.multiply(magnitude)
+        except Exception as e:
+            if str(e) == self.CANNOT_NORMALIZE_ZERO_VECTOR_MSG:
+                raise Exception(self.NO_UNIQUE_PARALLEL_COMPONENT_MSG)
+            else:
+                raise e
         
     def orthogonal(self, vector):
-        projection_result
+        try:
+            projection_result = self.projection(vector)
+            return self.minus(projection_result)
+        
+        except Exception as e:
+            if str(e) == self.CANNOT_NORMALIZE_ZERO_VECTOR_MSG:
+                raise Exception(self.NO_UNIQUE_ORTHOGONAL_COMPONENT_MSG)
+            else:
+                raise e
+        
 
 
 ##################################
@@ -225,6 +241,13 @@ vector = Vector([3.039, 1.879])
 vector_1 = Vector([0.825, 2.036])
 print(vector.projection(vector_1))
 
-vector = Vector([3.039, 1.879])
-vector_1 = Vector([0.825, 2.036])
-print(vector.projection(vector_1))
+vector = Vector([-9.88, -3.264, -8.159])
+vector_1 = Vector([-2.155, -9.353, -9.473])
+print(vector.orthogonal(vector_1))
+
+vector = Vector([3.009, -6.172, 3.692, -2.51])
+vector_1 = Vector([6.404, -9.144, 2.759, 8.178])
+projection_result = vector.projection(vector_1)
+orthogonal_result = vector.orthogonal(vector_1)
+print(projection_result)
+print(orthogonal_result)
