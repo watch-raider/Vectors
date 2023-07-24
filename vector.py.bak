@@ -117,10 +117,48 @@ class Vector(object):
             return False
             
     def projection(self, vector):
-        normalised_vector = vector.direction()
-        magnitude = self.dot_product(normalised_vector)
+        try:
+            normalised_vector = vector.direction()
+            magnitude = self.dot_product(normalised_vector)
+            
+            return normalised_vector.multiply(magnitude)
         
-        return normalised_vector.multiply(magnitude)
+        except Exception as e:
+            if str(e) == self.CANNOT_NORMALIZE_ZERO_VECTOR_MSG:
+                raise Exception(self.NO_UNIQUE_PARALLEL_COMPONENT_MSG)
+            else:
+                raise e
+        
+    def orthogonal(self, vector):
+        try:
+            projection_result = self.projection(vector)
+            return self.minus(projection_result)
+        
+        except Exception as e:
+            if str(e) == self.CANNOT_NORMALIZE_ZERO_VECTOR_MSG:
+                raise Exception(self.NO_UNIQUE_ORTHOGONAL_COMPONENT_MSG)
+            else:
+                raise e
+        
+    def cross_product(self, vector):
+        cp_result = []
+        
+        x_1, y_1, z_1 = self.coordinates
+        x_2, y_2, z_2 = vector.coordinates
+        
+        cp_result.append(float("%.3f" % (y_1*z_2 - y_2*z_1)))
+        cp_result.append(float("%.3f" % -(x_1*z_2 - x_2*z_1)))
+        cp_result.append(float("%.3f" % (x_1*y_2 - x_2*y_1)))
+        
+        return Vector(cp_result)
+        
+    def parallelogram_area(self, vector):
+        cp_result = self.cross_product(vector)
+        return cp_result.magnitude()
+        
+    def triangle_area(self, vector):
+        cp_result = self.cross_product(vector)
+        return 0.5 * cp_result.magnitude()
 
 
 ##################################
@@ -221,3 +259,30 @@ print('Projecting Vectors')
 vector = Vector([3.039, 1.879])
 vector_1 = Vector([0.825, 2.036])
 print(vector.projection(vector_1))
+
+vector = Vector([-9.88, -3.264, -8.159])
+vector_1 = Vector([-2.155, -9.353, -9.473])
+print(vector.orthogonal(vector_1))
+
+vector = Vector([3.009, -6.172, 3.692, -2.51])
+vector_1 = Vector([6.404, -9.144, 2.759, 8.178])
+projection_result = vector.projection(vector_1)
+orthogonal_result = vector.orthogonal(vector_1)
+print(projection_result)
+print(orthogonal_result)
+
+##################################
+print('\n')
+print('Cross Products')
+
+vector = Vector([8.462, 7.893, -8.187])
+vector_1 = Vector([6.984, -5.975, 4.778])
+print(vector.cross_product(vector_1))
+
+vector = Vector([-8.987, -9.838, 5.031])
+vector_1 = Vector([-4.268, -1.861, -8.866])
+print(float("%.3f" % vector.parallelogram_area(vector_1)))
+
+vector = Vector([1.5, 9.547, 3.691])
+vector_1 = Vector([-6.007, 0.124, 5.772])
+print(float("%.3f" % vector.triangle_area(vector_1)))

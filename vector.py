@@ -140,6 +140,25 @@ class Vector(object):
             else:
                 raise e
         
+    def cross_product(self, vector):
+        cp_result = []
+        
+        x_1, y_1, z_1 = self.coordinates
+        x_2, y_2, z_2 = vector.coordinates
+        
+        cp_result.append(float("%.3f" % (y_1*z_2 - y_2*z_1)))
+        cp_result.append(float("%.3f" % -(x_1*z_2 - x_2*z_1)))
+        cp_result.append(float("%.3f" % (x_1*y_2 - x_2*y_1)))
+        
+        return Vector(cp_result)
+        
+    def parallelogram_area(self, vector):
+        cp_result = self.cross_product(vector)
+        return cp_result.magnitude()
+        
+    def triangle_area(self, vector):
+        cp_result = self.cross_product(vector)
+        return 0.5 * cp_result.magnitude()
 
 
 ##################################
@@ -251,3 +270,19 @@ projection_result = vector.projection(vector_1)
 orthogonal_result = vector.orthogonal(vector_1)
 print(projection_result)
 print(orthogonal_result)
+
+##################################
+print('\n')
+print('Cross Products')
+
+vector = Vector([8.462, 7.893, -8.187])
+vector_1 = Vector([6.984, -5.975, 4.778])
+print(vector.cross_product(vector_1))
+
+vector = Vector([-8.987, -9.838, 5.031])
+vector_1 = Vector([-4.268, -1.861, -8.866])
+print(float("%.3f" % vector.parallelogram_area(vector_1)))
+
+vector = Vector([1.5, 9.547, 3.691])
+vector_1 = Vector([-6.007, 0.124, 5.772])
+print(float("%.3f" % vector.triangle_area(vector_1)))
