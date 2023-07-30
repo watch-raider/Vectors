@@ -44,7 +44,7 @@ class Vector(object):
         result = []
         
         for x in range(self.dimension):
-            result.append(float("%.3f" % (self.coordinates[x] * scalar)))
+            result.append(round(self.coordinates[x] * scalar, 3))
             
         return Vector(result)
        
