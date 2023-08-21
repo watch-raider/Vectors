@@ -27,7 +27,7 @@ class Vector(object):
         result = []
         
         for x in range(self.dimension):
-            result.append(float("%.3f" % (self.coordinates[x] + vector.coordinates[x])))
+            result.append(float("%.3f" % (Decimal(self.coordinates[x]) + Decimal(vector.coordinates[x]))))
             
         return Vector(result)
         
@@ -42,9 +42,8 @@ class Vector(object):
     
     def multiply(self, scalar):
         result = []
-        
         for x in range(self.dimension):
-            result.append(round(self.coordinates[x] * scalar, 3))
+            result.append(round(Decimal(self.coordinates[x]) * scalar, 3))
             
         return Vector(result)
        

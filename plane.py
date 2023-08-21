@@ -13,12 +13,12 @@ class Plane(object):
         self.dimension = 3
 
         if not normal_vector:
-            all_zeros = ['0']*self.dimension
-            normal_vector = Vector(all_zeros)
+            all_zeros = [0]*self.dimension
+            normal_vector = all_zeros
         self.normal_vector = normal_vector
 
         if not constant_term:
-            constant_term = Decimal('0')
+            constant_term = Decimal(0)
         self.constant_term = Decimal(constant_term)
 
         self.set_basepoint()
@@ -29,7 +29,7 @@ class Plane(object):
             n = self.normal_vector
             c = self.constant_term
             basepoint_coords = [0]*self.dimension
-
+                
             initial_index = Plane.first_nonzero_index(n)
             initial_coefficient = n[initial_index]
 

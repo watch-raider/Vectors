@@ -5,6 +5,7 @@ from vector import Vector
 getcontext().prec = 30
 
 
+    `
 class Line(object):
 
     NO_NONZERO_ELTS_FOUND_MSG = 'No nonzero elements found'
